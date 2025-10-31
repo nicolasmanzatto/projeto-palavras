@@ -1,0 +1,60 @@
+1|Palmeiras|Brasil|America|12
+2|Flamengo|Brasil|America|7
+3|Cruzeiro|Brasil|America|4
+4|Mirassol|Brasil|America|0
+5|Bahia|Brasil|America|2
+6|Fluminense|Brasil|America|4
+7|Botafogo|Brasil|America|3
+8|Vasco da Gama|Brasil|America|4
+9|Sao Paulo|Brasil|America|6
+10|Corinthians|Brasil|America|7
+11|Gremio|Brasil|America|2
+12|Red Bull Bragantino|Brasil|America|0
+13|Atletico-MG|Brasil|America|3
+14|Ceara|Brasil|America|0
+15|Internacional|Brasil|America|3
+16|Santos|Brasil|America|8
+17|Vitoria|Brasil|America|0
+18|Fortaleza|Brasil|America|0
+19|Juventude|Brasil|America|0
+20|Sport|Brasil|America|1
+21|Manchester United|Inglaterra|Europa|20
+22|Liverpool|Inglaterra|Europa|19
+23|Arsenal|Inglaterra|Europa|13
+24|Chelsea|Inglaterra|Europa|6
+25|Manchester City|Inglaterra|Europa|10
+26|Tottenham|Inglaterra|Europa|2
+27|Newcastle|Inglaterra|Europa|4
+28|Aston Villa|Inglaterra|Europa|7
+29|Everton|Inglaterra|Europa|9
+30|West Ham|Inglaterra|Europa|0
+31|Leicester City|Inglaterra|Europa|1
+32|Brighton|Inglaterra|Europa|0
+33|Wolverhampton|Inglaterra|Europa|3
+34|Crystal Palace|Inglaterra|Europa|0
+35|Fulham|Inglaterra|Europa|0
+36|Nottingham Forest|Inglaterra|Europa|1
+37|Southampton|Inglaterra|Europa|0
+38|Ipswich Town|Inglaterra|Europa|1
+39|Bournemouth|Inglaterra|Europa|0
+40|Brentford|Inglaterra|Europa|0
+41|LA Galaxy|EUA|America|5
+42|D.C. United|EUA|America|4
+43|Columbus Crew|EUA|America|3
+44|Sporting Kansas City|EUA|America|2
+45|San Jose Earthquakes|EUA|America|2
+46|Houston Dynamo|EUA|America|2
+47|Seattle Sounders|EUA|America|2
+48|Toronto FC|Canada|America|1
+49|Portland Timbers|EUA|America|1
+50|New York City FC|EUA|America|1
+51|Los Angeles FC|EUA|America|1
+52|Real Salt Lake|EUA|America|1
+53|Colorado Rapids|EUA|America|1
+54|Atlanta United|EUA|America|1
+55|New England Revolution|EUA|America|0
+56|FC Dallas|EUA|America|0
+57|New York Red Bulls|EUA|America|0
+58|Chicago Fire|EUA|America|0
+59|Inter Miami CF|EUA|America|0
+60|Orlando City|EUA|America|0
