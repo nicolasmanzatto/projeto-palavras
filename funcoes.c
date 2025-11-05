@@ -149,10 +149,10 @@ void editarTime(){
     printf("Digite o ID do time a editar: ");
     scanf("%d", &id);
     int idx = -1;
-    for (int i=0;i<total_times;i++){
-        if (times[i].id == id){ idx = i; break;}//procura o id no vetor
+    for(int i=0;i<total_times;i++){
+        if(times[i].id == id){idx = i; break;}//procura o id no vetor
     }
-    if (idx == -1){
+    if(idx == -1){
         printf("Time não encontrado.\n");//caso o id não exista
         return;
     }//if  
@@ -202,4 +202,5 @@ void modoMedio(){
 void modoDificil(){
 
 }
+
 
