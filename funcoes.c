@@ -145,6 +145,39 @@ void jogar(){//depois vou colocar esse void um arquivo .c pra pode puxar ele
 
 
 void editarTime(){
+    int id;
+    printf("Digite o ID do time a editar: ");
+    scanf("%d", &id);
+    int idx = -1;
+    for (int i=0;i<total_times;i++){
+        if (times[i].id == id){ idx = i; break;}//procura o id no vetor
+    }
+    if (idx == -1){
+        printf("Time não encontrado.\n");//caso o id não exista
+        return;
+    }//if  
+
+    printf("Nome atual: %s\n", times[idx].nome);
+    printf("Novo nome: ");
+    scanf("%[^\n]", times[idx].nome);//muda nome
+
+    printf("País atual: %s\n", times[idx].pais);
+    printf("Novo país: ");
+    scanf(" %[^\n]", times[idx].pais);//muda país
+
+    printf("Continente atual: %s\n", times[idx].continente);
+    printf("Novo continente: ");
+    scanf(" %[^\n]", times[idx].continente);//muda continente
+
+    printf("Títulos atuais: %d\n", times[idx].titulos);
+    printf("Novos títulos: ");
+    scanf("%d", &times[idx].titulos);//muda titulos
+
+    salvarTimes();//salva alteraçoes no arquivo
+    printf("Time editado com sucesso.\n");
+
+}//void
+
 
 }
 
@@ -157,11 +190,16 @@ void exclurTime(){
 }
 
 void modoFacil(){
+    
+    printf("\nMODO FACIL\n");
+    printf("Times Brasileiros serie A 2025\n");
+    printf("VocÊ terá 10 tentativas e sem cronometro!\n")
 
-}
+}//void
 void modoMedio(){
 
 }
 void modoDificil(){
 
 }
+
