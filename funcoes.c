@@ -227,6 +227,10 @@ void modoFacil(){
 
 void modoMedio(){
 
+    printf("MODO MEDIO\n");//titulo do modo
+    printf("Times da Premier League 2025\n");//tema do modo
+    printf("Você terá 7 tentativas e 3 minutos de tempo\n");//regras do modo
+
     int tentativas = 7;//menos tentativas que o fácil
     char chute[50];//variavel para guardar o chute do jogador
     char secreta[50] = "CHELSEA";//variavel para guardar palavra correta(o time certo)
