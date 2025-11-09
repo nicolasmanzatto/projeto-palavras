@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "funcoes.h"
@@ -179,7 +180,6 @@ void editarTime(){
 }//void
 
 
-}
 
 void pesquisarTime(){
     
@@ -191,16 +191,119 @@ void exclurTime(){
 
 void modoFacil(){
     
-    printf("\nMODO FACIL\n");
-    printf("Times Brasileiros serie A 2025\n");
-    printf("VocÊ terá 10 tentativas e sem cronometro!\n")
+    printf("MODO FACIL\n");//modo
+    printf("Times Brasileiros serie A 2025\n");//"tema"
+    printf("Você terá 10 tentativas e sem cronometro!\n");//regras
+
+    int tentativas = 10;//quantidade de tentativas
+    char chute[50];//variavel para guardar o chute do jogador
+    char secreta[50] = "CRUZEIRO";//variavel para guardar palavra correta(o time certo)
+
+
+     while(tentativas > 0){//repete enquanto ainda tiver tentativas
+        printf("Tentativas restantes: %d\n", tentativas);//mostra quantas ainda restam
+        printf("Chute o time: ");
+        scanf("%[\n]", chute);//le o chute do jogador
+
+        if(strcmp(chute, secreta) == 0){//verifica se o chute é igual à palavra secreta
+            printf("Você acertou!\n");//mensagem de acerto caso tenha acertado
+            return;
+
+        }else if(chute[0] > secreta[0]){//se o chute estiver acima que a da palavra certa
+            printf("Dica: o time correto começa com uma letra abaixo de '%c'\n", chute[0]);//dica
+
+        }else{
+            printf("Dica: o time correto começa com uma letra acima de '%c'\n", chute[0]);//dica
+        }
+
+        tentativas--;//diminui 1 tentativa a cada erro
+        
+    }//while
+
+    printf("\nVocê perdeu! O time certo era: %s\n", secreta);//mensagem caso o player perca 
 
 }//void
+
+
 void modoMedio(){
 
-}
+    int tentativas = 7;//menos tentativas que o fácil
+    char chute[50];//variavel para guardar o chute do jogador
+    char secreta[50] = "CHELSEA";//variavel para guardar palavra correta(o time certo)
+
+    while(tentativas > 0){//repete até acabar as tentativas
+        printf("Tentativas restantes: %d\n", tentativas);
+        printf("Chute o time: ");
+        scanf(" %[^\n]", chute);//le o chute do jogador
+
+        if(strcmp(chute, secreta) == 0){//verifica se o chute é igual à palavra secreta
+            printf("Você acertou!\n");//mensagem de acerto caso tenha acertado
+            return;
+
+        }else if(chute[0] > secreta[0]){
+            printf("Dica: o time correto começa com uma letra abaixo de '%c'\n", chute[0]);//dica
+
+        }else{
+            printf("Dica: o time correto começa com uma letra acima de '%c'\n", chute[0]);//dica
+        }
+
+
+        tentativas--;//diminui 1 tentativa a cada erro
+
+    }//while
+
+    printf("\nTempo esgotado ou tentativas acabaram!\n");
+    printf("O time correto era: %s\n", secreta);
+
+}//void
+
+
+
 void modoDificil(){
 
-}
+
+    //apresentação e regras
+    printf("MODO DIFICIL\n");
+    printf("Times da MLS 2025\n");
+    printf("Você terá 5 tentativas e 2 minutos de tempo\n");
+    printf("a cada erro voce perde 1 tentativa e 10 segundos!\n");
+    
+
+    int tentativas = 5;//define as tentativas
+    char chute[50];//variavel para guardar o chute do jogador
+    char secreta[50] = "LA GALAXY";//palavra correta(primeiro time da lista)
+    int tempo = 120;//tempo total (2 minutos em segundos)
+
+    while(tentativas > 0 && tempo > 0){//repete até acabar as tentativas
+
+        printf("Tentativas restantes: %d | Tempo restante: %d segundos\n", tentativas, tempo);
+        printf("Chute o time ");
+        scanf("%[\n]", chute);
+
+        if(strcmp(chute, secreta) == 0){//verifica se acertou
+            printf("Você acertou!\n");//mensagem de acerto caso tenha acertado
+
+            return;
+
+
+        }else if(chute[0] > secreta[0]){
+            printf("Dica: o time correto começa com uma letra abaixo de '%c'\n", chute[0]);//dica
+
+        }else{
+            printf("Dica: o time correto começa com uma letra acima de '%c'\n", chute[0]);//dica
+
+        }
+
+        tentativas--;//diminui tentativa
+        tempo -= 10;//a cada erro perde 10 segundos
+
+    }//while
+
+    printf("Acabaram as tentativas ou o tempo!\n");
+    printf("O time certo era: %s\n", secreta);
+
+
+
+}//void
 
 
