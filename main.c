@@ -3,12 +3,15 @@
 #include <string.h>
 #include "funcoes.h"
 
+
 int main(){
-    int opc = 0;
-    //carrega os times ao iniciar 
+    int opc = -1; 
+
+    // Carrega os times 
     carregarTimes();
 
-    do{//do while caso o usuario escrever um numero menor que 1 e maior que 6
+  
+    do { 
         printf("\n===== MENU ===== \n");
         printf("1. Jogar\n");
         printf("2. Cadastrar Time\n");
@@ -17,45 +20,29 @@ int main(){
         printf("5. Excluir Time\n");
         printf("6. Pesquisar os Times\n");
         printf("0. Sair\n");
-        printf("\nEscolha uma opção(que seja maior que 1 e menor que 6):\n");
-        scanf("%d", &opc);
-        setbuf(stdin, NULL);
-    }while(opc<0 || opc>6);
-
-    switch (opc){
-    case 1 :
-        jogar();//puxaar do .h
-        break;
-
-    case 2 :
-        cadastrarTime();//puxaar do .h
-        break;
-
-    case 3 :
-        listarTimes();//puxaar do .h
-        break;
-
-    case 4 :
-        editarTime();//puxaar do .h
-        break;
-
-    case 5 :
-        excluirTime();//puxaar do .h
-        break;
-
-    case 6 :
-        pesquisarTimes();//puxaar do .h
-        break;
-
-     case 0 :
-        printf("Saindo...\n");
-        break;
-
-    default:
-        printf("Opção invalida!!");
+        printf("\nEscolha uma opção (0 a 6):\n");
         
-        break;
-    }//switch
+      
+        if (scanf("%d", &opc) != 1) { 
+            while (getchar() != '\n' && getchar() != EOF); 
+            opc = -1; 
+            continue;
+        }
+        
+
+        setbuf(stdin, NULL);
+
+        switch (opc){
+            case 1 : jogar(); break;
+            case 2 : cadastrarTime(); break;
+            case 3 : listarTimes(); break;
+            case 4 : editarTime(); break;
+            case 5 : excluirTime(); break;
+            case 6 : pesquisarTimes(); break;
+            case 0 : printf("Saindo...\n"); break;
+            default: printf("Opção inválida! Digite um número entre 0 e 6.\n");
+        }
+    } while (opc != 0); // Repete enquanto a opção não for 0
 
     return 0;
 }//main
