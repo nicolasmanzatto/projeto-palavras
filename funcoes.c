@@ -2,44 +2,39 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <ctype.h>
 #include "funcoes.h"
 
+#define MAX_TENTATIVAS 10
 #define MAX_TIMES 100//definido pra fica mas facil, so escrevendo MAX_TIMES
 #define ARQUIVO_TIMES "times.txt"//mesma ideia acima
 
 Time times[MAX_TIMES];//definindo o nome time pra usar , puxanndo da struct de funcoes.h
 int total_times = 0;
 
-void carregarTimes(){//ele vai ler os arquvios do time.txt, e vai armazenar os arquivos dentro da struct que esta no .h, assim vai fica armazennado os times la
-    FILE *arquivo = fopen(ARQUIVO_TIMES,"r");
-    if (arquivo == NULL){
-        printf("\n---ERRO!!---\n");
-        printf("Arquivo de times não encontrado!!");
-        return;
-    }//if ,//verificando se o arquivo vai abrir ou não
-    total_times = 0;
-    while (fscanf(arquivo, "%d%d|%49[^|]|%29[^|]|%19[^|]|%d\n",
-                            &times[total_times].id,
-                            times[total_times].nome,
-                            times[total_times].pais,
-                            times[total_times].continente,
-                            &times[total_times].titulos) == 5){
-        total_times++;
-         if (total_times >= MAX_TIMES) break;//caso atinja o max de times, ele vai parar
-    }//while
-    fclose(arquivo);
-    printf("Times carregados: %d\n", total_times);
-}//carregarTimes
+
+void limpar_buffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+// Função utilitária para converter uma string para maiúsculas 
+void to_upper_case(char *str) {
+    for (int i = 0; str[i]; i++) {
+        str[i] = toupper((unsigned char)str[i]);
+    }
+}
 
 //savlando os times no times.txt
-void salvarTimes(){//ele vai pegar todos times que tem na struct times dentro do arquivo .h, e escrever dentro do arquivo time.txt, salvando la
-    FILE *arquivo = fopen(ARQUIVO_TIMES,"w");
-    if (arquivo == NULL){
-        printf("\n---ERRO!!---\n");
-        printf("Erro em salvar os times!!");
-        return;
-    }//if, verificando se o arquivo vai abrir ou não
+void salvarTimes(){
+    FILE *arquivo = fopen(ARQUIVO_TIMES, "w"); 
     
+    if (arquivo == NULL){
+        printf("\n--- ERRO: Nao foi possivel abrir/criar o arquivo para salvar! ---\n");
+        return;
+    }
+    
+    // Percorre todos os times na memória e os escreve no arquivo
     for (size_t i = 0; i < total_times; i++){
         fprintf(arquivo,"%d|%s|%s|%s|%d\n",
                         times[i].id,
@@ -47,11 +42,46 @@ void salvarTimes(){//ele vai pegar todos times que tem na struct times dentro do
                         times[i].pais,
                         times[i].continente,
                         times[i].titulos);
-    }//for pra pegar os dados da struct time, e colocar no arquivo times.txt
+    }
     
     fclose(arquivo);
-    printf("Times salvos com sucesso!\n");
-}//salvarTimes
+    // Nota: Removi o 'printf("Times salvos com sucesso!\n")' daqui para que a mensagem de sucesso seja dada pela função que a chamou (ex: cadastrarTime).
+}//salvar time
+
+void carregarTimes(){
+    FILE *arquivo = fopen(ARQUIVO_TIMES, "r"); // MODO DE LEITURA: "r"
+    
+    if (arquivo == NULL) {
+        printf("\n--- Arquivo de times.txt nao encontrado. Criando um novo... ---\n");
+        // Tenta criar o arquivo vazio se não existir
+        arquivo = fopen(ARQUIVO_TIMES, "w"); 
+        if (arquivo != NULL) {
+            fclose(arquivo);
+        } else {
+             printf("ERRO FATAL: Nao foi possivel abrir ou criar o arquivo de times!\n");
+        }
+        total_times = 0; // Garante que a contagem seja zero.
+        return; 
+    }
+    
+    total_times = 0;
+    
+    // Usando ' %d' com espaço antes do %d para ignorar quebras de linha/espaços iniciais
+    // E sem '\n' no final da string de formato para maior robustez de leitura.
+    while (fscanf(arquivo, " %d|%49[^|]|%29[^|]|%19[^|]|%d", 
+                  &times[total_times].id,
+                  times[total_times].nome, 
+                  times[total_times].pais, 
+                  times[total_times].continente,
+                  &times[total_times].titulos) == 5){
+        
+        total_times++;
+        if (total_times >= MAX_TIMES) break;
+    }
+    
+    fclose(arquivo);
+    printf("Times carregados: %d\n", total_times);
+}//carregar time
 
 void cadastrarTime(){
       if (total_times >= MAX_TIMES) {
@@ -102,14 +132,16 @@ void listarTimes(){
 
 
 
-void jogar(){//depois vou colocar esse void um arquivo .c pra pode puxar ele
+void jogar(){
 
     int dif = 0;
 
     do{
-        if(dif<1 || dif>3){
-            printf("\nERRO: Opção inválida!\n");
-        }
+        if(dif < 0 || dif > 3){
+            if(dif != 0) {
+                printf("\nERRO: Opção inválida!\n");
+            }//IF INTERNO
+        }//IF EXTERNO
         printf("\nBEM-VINDO!\n");
         printf("NÍVEIS DE DIFICULDADE:\n");
         printf("1 - Fácil\n");
@@ -117,21 +149,27 @@ void jogar(){//depois vou colocar esse void um arquivo .c pra pode puxar ele
         printf("3 - Dificil\n");
          printf("0. Sair\n");
         printf("Digite o nível de diificuldade: ");
-        scanf("%i", &dif);
+        if (scanf("%i", &dif) != 1) { // Verifica a leitura
+             // Lógica para lidar com entrada inválida (se o usuário digitar texto)
+             while (getchar() != '\n');
+             dif = -1; 
+             continue;
+        }//if
+        limpar_buffer();
 
     }while(dif<0 || dif>3);
 
     switch (dif){
     case 1 :
-        modoFacil();//puxaar do .h
+        modoFacil();
         break;
 
     case 2 :
-        modoMedio();//puxaar do .h
+        modoMedio();
         break;
 
     case 3 :
-        modoDificil();//puxaar do .h
+        modoDificil();
         break;
         
     case 0 :
@@ -184,22 +222,24 @@ void editarTime(){
 
 void pesquisarTimes(){
     char termo[50];
-    printf("Digite parte do tnome do time para pesquisar: \n");
+    printf("Digite parte do nome do time para pesquisar: \n");
     scanf(" %[^\n]", termo);
 
     printf("\nResultado da pesquisa: \n");
     int encontrou = 0;
     for (int i = 0; i < total_times; i++){
         if (strstr(times[i].nome, termo) != NULL){
-            printf("ID: %d | %s | %s | %s | %d | titulos\n0",
+            printf("ID: %d | %s | %s | %s | %d | titulos\n",
             times[i].id,
             times[i].nome,
             times[i].pais,
             times[i].continente,
             times[i].titulos);
-        }//for
+            
+            encontrou = 1;
+        }//if
         
-    }//if
+    }//for
     
     if (!encontrou){
         printf("Nenhum time encontrado.\n");
@@ -208,67 +248,136 @@ void pesquisarTimes(){
 }//void
 
 void excluirTime(){
-    int id;//fiz para excluir pelo id, mas dá para fazer pelo nome(maior chance de excluir o time errado se tiver mais de um time com o mesmo nome)
+    int id;
     printf("\nDigite o ID do time para excluir: \n");
     scanf("%d", &id);
 
     int idx = -1;
+   
     for (int i = 0; i < total_times; i++){
         if (times[i].id == id){
             idx = i;
             break;
-        }//if
-        
+        }//fif
     }//for
+    
     if (idx == -1){
         printf("Time não encontrado.\n");
         return;
-    }//if time não encontrado
-    for (int i = idx; i < total_times; i++){
+    }//if
+
+  
+
+    for (int i = idx; i < total_times - 1; i++){
         times[i] = times[i+1];
-        times[i].id = i + 1;
-
+       
     }//for
+
     total_times--;
+    
+ 
+    for (int i = 0; i < total_times; i++){
+        times[i].id = i + 1;
+    }//for
+    
+
     salvarTimes();
-    printf("Timeremovido com sucesso!\n");
+    printf("Time '%s' removido e lista reajustada com sucesso!\n", times[idx].nome); 
     
-}//void excluirTime
 
-void modoFacil(){
+    printf("Time removido com sucesso!\n");
+}//exclur times
+
+void modoFacil() {
+    if (total_times == 0) {
+        printf("🚨 Erro: Nao ha times cadastrados para iniciar o jogo.\n");
+        return;
+    }
+
+    // Array auxiliar para armazenar os ÍNDICES dos times brasileiros
+    int indices_brasil[MAX_TIMES];
+    int total_times_brasil = 0;
+
+    // --- 1. FILTRAGEM DE TIMES ---
+    for (int i = 0; i < total_times; i++) {
+        // Usa strcmp para verificar se o país é "Brasil"
+        if (strcmp(times[i].pais, "Brasil") == 0) {
+            indices_brasil[total_times_brasil] = i;
+            total_times_brasil++;
+        }
+    }
+
+    if (total_times_brasil == 0) {
+        printf("🚨 Erro: Nao ha times brasileiros cadastrados para o Modo Facil.\n");
+        return;
+    }
+
+    // --- 2. GERAÇÃO DO TIME SECRETO (Apenas entre os brasileiros) ---
+    srand(time(NULL)); 
+    // Sorteia um índice dentro da lista filtrada (de 0 até total_times_brasil - 1)
+    int indice_sorteado_na_lista = rand() % total_times_brasil;
     
-    printf("MODO FACIL\n");//modo
-    printf("Times Brasileiros serie A 2025\n");//"tema"
-    printf("Você terá 10 tentativas e sem cronometro!\n");//regras
+    // Pega o índice real do time na array global 'times'
+    int indice_time_global = indices_brasil[indice_sorteado_na_lista];
+    Time time_secreto = times[indice_time_global]; 
+    
+    // Prepara o nome secreto para comparação (MAIÚSCULAS)
+    char nome_secreto_upper[50]; 
+    strcpy(nome_secreto_upper, time_secreto.nome);
+    to_upper_case(nome_secreto_upper); 
+    
+    int tentativas_restantes = MAX_TENTATIVAS;
+    char palpite[50]; 
+    char palpite_upper[50];
 
-    int tentativas = 10;//quantidade de tentativas
-    char chute[50];//variavel para guardar o chute do jogador
-    char secreta[50] = "CRUZEIRO";//variavel para guardar palavra correta(o time certo)
-
-
-     while(tentativas > 0){//repete enquanto ainda tiver tentativas
-        printf("Tentativas restantes: %d\n", tentativas);//mostra quantas ainda restam
-        printf("Chute o time: ");
-        scanf("%[\n]", chute);//le o chute do jogador
-
-        if(strcmp(chute, secreta) == 0){//verifica se o chute é igual à palavra secreta
-            printf("Você acertou!\n");//mensagem de acerto caso tenha acertado
-            return;
-
-        }else if(chute[0] > secreta[0]){//se o chute estiver acima que a da palavra certa
-            printf("Dica: o time correto começa com uma letra abaixo de '%c'\n", chute[0]);//dica
-
-        }else{
-            printf("Dica: o time correto começa com uma letra acima de '%c'\n", chute[0]);//dica
+    printf("\n--- ⚽ MODO FACIL: ADIVINHE O TIME BRASILEIRO ⚽ ---\n");
+    printf("O time secreto foi sorteado! Voce tem **%d tentativas**.\n", MAX_TENTATIVAS);
+    
+    // --- 3. LOOP DE TENTATIVAS ---
+    while (tentativas_restantes > 0) {
+        printf("\nTentativas restantes: **%d**\n", tentativas_restantes);
+        
+        // --- LÓGICA DA DICA ---
+        if (tentativas_restantes == MAX_TENTATIVAS) {
+             // Dica 1: País (Sempre Brasil neste modo)
+             printf("💡 DICA 1: O time eh do(a) **%s**.\n", time_secreto.pais);
+        } else {
+             // Dica 2+: Tamanho do nome
+             size_t tamanho_nome = strlen(time_secreto.nome);
+             printf("💡 DICA: O nome do time tem **%zu caracteres** (contando espacos/hifens).\n", tamanho_nome);
         }
 
-        tentativas--;//diminui 1 tentativa a cada erro
-        
-    }//while
+        // --- ENTRADA DO USUÁRIO ---
+        printf("Seu palpite (digite o nome do time): ");
+        // Continua usando scanf com espaço para leitura segura de string,
+        // mas é altamente recomendado usar fgets com tratamento de \n.
+        if (scanf(" %[^\n]", palpite) != 1) { 
+            printf("Entrada invalida. Tentativa desperdicada.\n");
+            limpar_buffer(); 
+            tentativas_restantes--;
+            continue;
+        }
+        limpar_buffer(); // Limpa o buffer após a leitura bem-sucedida
 
-    printf("\nVocê perdeu! O time certo era: %s\n", secreta);//mensagem caso o player perca 
+        // Copia e normaliza o palpite para MAIÚSCULAS
+        strcpy(palpite_upper, palpite);
+        to_upper_case(palpite_upper);
 
-}//void
+        // --- VERIFICAÇÃO ---
+        if (strcmp(palpite_upper, nome_secreto_upper) == 0) {
+            printf("\n🎉🎉 PARABENS! Voce adivinhou o time: **%s**! 🎉🎉\n", time_secreto.nome);
+            return;
+        } else {
+            printf("❌ Que pena, '%s' nao eh o time secreto.\n", palpite);
+            tentativas_restantes--;
+        }
+    }
+
+    // --- 4. FIM DO JOGO (PERDEU) ---
+    printf("\n--- 💔 FIM DE JOGO 💔 ---\n");
+    printf("Suas %d tentativas acabaram.\n", MAX_TENTATIVAS);
+    printf("O time secreto era: **%s**\n", time_secreto.nome);
+}
 
 
 void modoMedio(){
@@ -305,7 +414,7 @@ void modoMedio(){
     printf("\nTempo esgotado ou tentativas acabaram!\n");
     printf("O time correto era: %s\n", secreta);
 
-}//void
+}//modo medio
 
 
 
@@ -354,6 +463,8 @@ void modoDificil(){
 
 
 
-}//void
+}//modo dificil
+
+
 
 
