@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include <string.h>
 #include "funcoes.h"
 
 int main(){
@@ -27,11 +28,11 @@ int main(){
         break;
 
     case 2 :
-        inserirTime();//puxaar do .h
+        cadastrarTime();//puxaar do .h
         break;
 
     case 3 :
-        listarTime();//puxaar do .h
+        listarTimes();//puxaar do .h
         break;
 
     case 4 :
@@ -52,7 +53,7 @@ int main(){
 
     default:
         printf("Opção invalida!!");
-        return;
+        
         break;
     }//switch
 

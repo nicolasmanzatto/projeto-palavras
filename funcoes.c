@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "funcoes.h"
 
 #define MAX_TIMES 100//definido pra fica mas facil, so escrevendo MAX_TIMES
@@ -52,7 +53,7 @@ void salvarTimes(){//ele vai pegar todos times que tem na struct times dentro do
     printf("Times salvos com sucesso!\n");
 }//salvarTimes
 
-void inserirTime(){
+void cadastrarTime(){
       if (total_times >= MAX_TIMES) {
         printf("Limite de times atingido!\n");
         return;
@@ -85,7 +86,7 @@ void inserirTime(){
 }//inserir time, caso o usuario queira
 
 
-void listarTime(){
+void listarTimes(){
         
     printf("\n=== LISTA DE TIMES ===\n");
     for (size_t i = 0; i < total_times; i++){
@@ -181,13 +182,58 @@ void editarTime(){
 
 
 
-void pesquisarTime(){
+void pesquisarTimes(){
+    char termo[50];
+    printf("Digite parte do tnome do time para pesquisar: \n");
+    scanf(" %[^\n]", termo);
+
+    printf("\nResultado da pesquisa: \n");
+    int encontrou = 0;
+    for (int i = 0; i < total_times; i++){
+        if (strstr(times[i].nome, termo) != NULL){
+            printf("ID: %d | %s | %s | %s | %d | titulos\n0",
+            times[i].id,
+            times[i].nome,
+            times[i].pais,
+            times[i].continente,
+            times[i].titulos);
+        }//for
+        
+    }//if
     
-}
+    if (!encontrou){
+        printf("Nenhum time encontrado.\n");
+    }//if
+    
+}//void
 
-void exclurTime(){
+void excluirTime(){
+    int id;//fiz para excluir pelo id, mas dá para fazer pelo nome(maior chance de excluir o time errado se tiver mais de um time com o mesmo nome)
+    printf("\nDigite o ID do time para excluir: \n");
+    scanf("%d", &id);
 
-}
+    int idx = -1;
+    for (int i = 0; i < total_times; i++){
+        if (times[i].id == id){
+            idx = i;
+            break;
+        }//if
+        
+    }//for
+    if (idx == -1){
+        printf("Time não encontrado.\n");
+        return;
+    }//if time não encontrado
+    for (int i = idx; i < total_times; i++){
+        times[i] = times[i+1];
+        times[i].id = i + 1;
+
+    }//for
+    total_times--;
+    salvarTimes();
+    printf("Timeremovido com sucesso!\n");
+    
+}//void excluirTime
 
 void modoFacil(){
     
