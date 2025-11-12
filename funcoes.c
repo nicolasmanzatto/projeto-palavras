@@ -313,7 +313,7 @@ void modoFacil() {
     }
 
     // --- 2. GERAÇÃO DO TIME SECRETO (Apenas entre os brasileiros) ---
-    srand(time(NULL)); 
+    //srand(time(NULL)); 
     // Sorteia um índice dentro da lista filtrada (de 0 até total_times_brasil - 1)
     int indice_sorteado_na_lista = rand() % total_times_brasil;
     
@@ -381,89 +381,191 @@ void modoFacil() {
 
 
 void modoMedio(){
+    if (total_times == 0) {
+        printf("🚨 Erro: Nao ha times cadastrados para iniciar o jogo.\n");
+        return;
+    }
 
-    printf("MODO MEDIO\n");//titulo do modo
-    printf("Times da Premier League 2025\n");//tema do modo
-    printf("Você terá 7 tentativas e 3 minutos de tempo\n");//regras do modo
+    // Array auxiliar para armazenar os ÍNDICES dos times ingleses
+    int indices_inglaterra[MAX_TIMES];
+    int total_times_inglaterra = 0;
 
+    // --- 1. FILTRAGEM DE TIMES ---
+    for (int i = 0; i < total_times; i++) {
+        // Usa strcmp para verificar se o país é "Brasil"
+        if (strcmp(times[i].pais, "Inglaterra") == 0) {
+            indices_inglaterra[total_times_inglaterra] = i;
+            total_times_inglaterra++;
+        }
+    }
+
+    // --- 2. GERAÇÃO DO TIME SECRETO (Apenas entre os ingleses) ---
+     
+    // Sorteia um índice dentro da lista filtrada (de 0 até total_times_inglaterra - 1)
+    int indice_sorteado_na_lista = rand() % total_times_inglaterra;
+    
+    // Pega o índice real do time na array global 'times'
+    int indice_time_global = indices_inglaterra[indice_sorteado_na_lista];
+    Time time_secreto = times[indice_time_global]; 
+    
+    // Prepara o nome secreto para comparação (MAIÚSCULAS)
+    char nome_secreto_upper[50]; 
+    strcpy(nome_secreto_upper, time_secreto.nome);
+    to_upper_case(nome_secreto_upper); 
+    
     int tentativas = 7;//menos tentativas que o fácil
-    char chute[50];//variavel para guardar o chute do jogador
-    char secreta[50] = "CHELSEA";//variavel para guardar palavra correta(o time certo)
+    char palpite[50];//variavel para guardar o chute do jogador 
+    char palpite_upper[50];
 
-    while(tentativas > 0){//repete até acabar as tentativas
-        printf("Tentativas restantes: %d\n", tentativas);
-        printf("Chute o time: ");
-        scanf(" %[^\n]", chute);//le o chute do jogador
+    printf("\n--- ⚽ MODO MEDIO: ADIVINHE O TIME DO CAMPEONATO INGLES ⚽ ---\n");
+    printf("O time secreto foi sorteado! Voce tem **%d tentativas**.\n", tentativas);
 
-        if(strcmp(chute, secreta) == 0){//verifica se o chute é igual à palavra secreta
-            printf("Você acertou!\n");//mensagem de acerto caso tenha acertado
-            return;
-
-        }else if(chute[0] > secreta[0]){
-            printf("Dica: o time correto começa com uma letra abaixo de '%c'\n", chute[0]);//dica
-
-        }else{
-            printf("Dica: o time correto começa com uma letra acima de '%c'\n", chute[0]);//dica
+    // --- 3. LOOP DE TENTATIVAS ---
+    while (tentativas > 0) {
+        printf("\nTentativas restantes: **%d**\n", tentativas);
+        
+        // --- LÓGICA DA DICA ---
+        if (tentativas == 7) {
+             // Dica 1: País (Sempre inglaterra neste modo)
+             printf("💡 DICA 1: O time eh do(a) **%s**.\n", time_secreto.pais);
+        } else {
+             // Dica 2+: Tamanho do nome
+             size_t tamanho_nome = strlen(time_secreto.nome);
+             printf("💡 DICA: O nome do time tem **%zu caracteres** (contando espacos/hifens).\n", tamanho_nome);
         }
 
+        // --- ENTRADA DO USUÁRIO ---
+        printf("Seu palpite (digite o nome do time): ");
+        // Continua usando scanf com espaço para leitura segura de string,
+        // mas é altamente recomendado usar fgets com tratamento de \n.
+        if (scanf(" %[^\n]", palpite) != 1) { 
+            printf("Entrada invalida. Tentativa desperdicada.\n");
+            limpar_buffer(); 
+            tentativas--;
+            continue;
+        }
+        limpar_buffer(); // Limpa o buffer após a leitura bem-sucedida
 
-        tentativas--;//diminui 1 tentativa a cada erro
+        // Copia e normaliza o palpite para MAIÚSCULAS
+        strcpy(palpite_upper, palpite);
+        to_upper_case(palpite_upper);
 
-    }//while
+        // --- VERIFICAÇÃO ---
+        if (strcmp(palpite_upper, nome_secreto_upper) == 0) {
+            printf("\n🎉🎉 PARABENS! Voce adivinhou o time: **%s**! 🎉🎉\n", time_secreto.nome);
+            return;
+        } else {
+            printf("❌ Que pena, '%s' nao eh o time secreto.\n", palpite);
+            tentativas--;
+        }
+    }
 
-    printf("\nTempo esgotado ou tentativas acabaram!\n");
-    printf("O time correto era: %s\n", secreta);
+        // --- 4. FIM DO JOGO (PERDEU) ---
+    printf("\n--- 💔 FIM DE JOGO 💔 ---\n");
+    printf("Suas %d tentativas acabaram.\n", tentativas);
+    printf("O time secreto era: **%s**\n", time_secreto.nome);
+}
 
-}//modo medio
-
-
-
-void modoDificil(){
-
-
-    //apresentação e regras
-    printf("MODO DIFICIL\n");
-    printf("Times da MLS 2025\n");
-    printf("Você terá 5 tentativas e 2 minutos de tempo\n");
-    printf("a cada erro voce perde 1 tentativa e 10 segundos!\n");
     
 
-    int tentativas = 5;//define as tentativas
-    char chute[50];//variavel para guardar o chute do jogador
-    char secreta[50] = "LA GALAXY";//palavra correta(primeiro time da lista)
+void modoDificil(){
+    if (total_times == 0) {
+        printf("🚨 Erro: Nao ha times cadastrados para iniciar o jogo.\n");
+        return;
+    }
+
+    // Array auxiliar para armazenar os ÍNDICES dos times ingleses
+    int indices_eua[MAX_TIMES];
+    int total_times_eua = 0;
     int tempo = 120;//tempo total (2 minutos em segundos)
 
-    while(tentativas > 0 && tempo > 0){//repete até acabar as tentativas
+    // --- 1. FILTRAGEM DE TIMES ---
+    for (int i = 0; i < total_times; i++) {
+        // Usa strcmp para verificar se o país é "Brasil"
+        if (strcmp(times[i].pais, "EUA") == 0) {
+            indices_eua[total_times_eua] = i;
+            total_times_eua++;
+        }
+    }
 
-        printf("Tentativas restantes: %d | Tempo restante: %d segundos\n", tentativas, tempo);
-        printf("Chute o time ");
-        scanf("%[\n]", chute);
+    // --- 2. GERAÇÃO DO TIME SECRETO (Apenas entre dos EUA) ---
+     
+    // Sorteia um índice dentro da lista filtrada (de 0 até total_times_eua - 1)
+    int indice_sorteado_na_lista = rand() % total_times_eua;
+    
+    // Pega o índice real do time na array global 'times'
+    int indice_time_global = indices_eua[indice_sorteado_na_lista];
+    Time time_secreto = times[indice_time_global]; 
+    
+    // Prepara o nome secreto para comparação (MAIÚSCULAS)
+    char nome_secreto_upper[50]; 
+    strcpy(nome_secreto_upper, time_secreto.nome);
+    to_upper_case(nome_secreto_upper); 
+    
+    int tentativas = 5;//menos tentativas que o fácil
+    char palpite[50];//variavel para guardar o chute do jogador 
+    char palpite_upper[50];
 
-        if(strcmp(chute, secreta) == 0){//verifica se acertou
-            printf("Você acertou!\n");//mensagem de acerto caso tenha acertado
+    printf("\n--- ⚽ MODO DIIFICIL: ADIVINHE O TIME DO CAMPEONATO DOS EUA ⚽ ---\n");
+    printf("Times da MLS 2025\n");
+    //apresentação e regras
+    printf("Você terá 5 tentativas e 2 minutos de tempo\n");
+    printf("a cada erro voce perde 1 tentativa e 10 segundos!\n");
+    printf("O time secreto foi sorteado! Voce tem **%d tentativas**.\n", tentativas);
 
-            return;
-
-
-        }else if(chute[0] > secreta[0]){
-            printf("Dica: o time correto começa com uma letra abaixo de '%c'\n", chute[0]);//dica
-
-        }else{
-            printf("Dica: o time correto começa com uma letra acima de '%c'\n", chute[0]);//dica
-
+    // --- 3. LOOP DE TENTATIVAS ---
+    while (tentativas > 0) {
+        printf("\nTentativas restantes: **%d**\n", tentativas);
+        
+        // --- LÓGICA DA DICA ---
+        if (tentativas == 5) {
+             // Dica 1: País (Sempre inglaterra neste modo)
+             printf("💡 DICA 1: O time eh do(a) **%s**.\n", time_secreto.pais);
+        } else {
+             // Dica 2+: Tamanho do nome
+             size_t tamanho_nome = strlen(time_secreto.nome);
+             printf("💡 DICA: O nome do time tem **%zu caracteres** (contando espacos/hifens).\n", tamanho_nome);
         }
 
-        tentativas--;//diminui tentativa
-        tempo -= 10;//a cada erro perde 10 segundos
+        // --- ENTRADA DO USUÁRIO ---
+        printf("Seu palpite (digite o nome do time): ");
+        // Continua usando scanf com espaço para leitura segura de string,
+        // mas é altamente recomendado usar fgets com tratamento de \n.
+        if (scanf(" %[^\n]", palpite) != 1) { 
+            printf("Entrada invalida. Tentativa desperdicada.\n");
+            limpar_buffer(); 
+            tentativas--;
+            continue;
+        }
+        limpar_buffer(); // Limpa o buffer após a leitura bem-sucedida
 
-    }//while
+        // Copia e normaliza o palpite para MAIÚSCULAS
+        strcpy(palpite_upper, palpite);
+        to_upper_case(palpite_upper);
 
-    printf("Acabaram as tentativas ou o tempo!\n");
-    printf("O time certo era: %s\n", secreta);
+        // --- VERIFICAÇÃO ---
+        if (strcmp(palpite_upper, nome_secreto_upper) == 0) {
+            printf("\n🎉🎉 PARABENS! Voce adivinhou o time: **%s**! 🎉🎉\n", time_secreto.nome);
+            return;
+        } else {
+            printf("❌ Que pena, '%s' nao eh o time secreto.\n", palpite);
+            tentativas--;
+            tempo -= 10;//a cada erro perde 10 segundos
+        }
+    }
+
+        // --- 4. FIM DO JOGO (PERDEU) ---
+    printf("\n--- 💔 FIM DE JOGO 💔 ---\n");
+    printf("Suas %d tentativas acabaram.\n", tentativas);
+    printf("O time secreto era: **%s**\n", time_secreto.nome);
+    
+    
+}//MODO DIFICIL
 
 
 
-}//modo dificil
+
+
 
 
 

@@ -1,11 +1,14 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include <string.h>
+#include<time.h>
 #include "funcoes.h"
 
 
 int main(){
     int opc = -1; 
+    //  randomiza uma vez
+    srand(time(NULL));
 
     // Carrega os times 
     carregarTimes();
