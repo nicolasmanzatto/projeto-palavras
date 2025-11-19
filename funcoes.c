@@ -199,16 +199,17 @@ void editarTime(){
 
     printf("Nome atual: %s\n", times[idx].nome);
     printf("Novo nome: ");
-    scanf("%[^\n]", times[idx].nome);//muda nome
-
+    scanf("%s",&times[idx].nome);//muda nome
     printf("País atual: %s\n", times[idx].pais);
     printf("Novo país: ");
-    scanf(" %[^\n]", times[idx].pais);//muda país
+    scanf(" %s",&times[idx].pais);//muda país
+
+    
 
     printf("Continente atual: %s\n", times[idx].continente);
     printf("Novo continente: ");
-    scanf(" %[^\n]", times[idx].continente);//muda continente
-
+    scanf("%s",&times[idx].continente);//muda continente
+    limpar_buffer();
     printf("Títulos atuais: %d\n", times[idx].titulos);
     printf("Novos títulos: ");
     scanf("%d", &times[idx].titulos);//muda titulos
@@ -222,14 +223,15 @@ void editarTime(){
 
 void pesquisarTimes(){
     char termo[50];
-    printf("Digite parte do nome do time para pesquisar: \n");
+    printf("AVISO!! Digite o nome com a primeira letra maiuscula(Ex:Palmeiras)!!\n");
+    printf("Digite o nome do time para pesquisar: \n");
     scanf(" %[^\n]", termo);
 
     printf("\nResultado da pesquisa: \n");
     int encontrou = 0;
     for (int i = 0; i < total_times; i++){
         if (strstr(times[i].nome, termo) != NULL){
-            printf("ID: %d | %s | %s | %s | %d | titulos\n",
+            printf("ID: %d | %s | %s | %s | %d titulos\n",
             times[i].id,
             times[i].nome,
             times[i].pais,
@@ -418,7 +420,10 @@ void modoMedio(){
     char palpite_upper[50];
 
     printf("\n--- ⚽ MODO MEDIO: ADIVINHE O TIME DO CAMPEONATO INGLES ⚽ ---\n");
-    printf("O time secreto foi sorteado! Voce tem **%d tentativas**.\n", tentativas);
+    printf("Times da Champions League 2025\n");
+    //apresentação e regras
+    printf("a cada erro voce perde 1 tentativa\n");
+    printf("O time secreto foi sorteado! Voce tem *%d tentativas*.\n", tentativas);
 
     // --- 3. LOOP DE TENTATIVAS ---
     while (tentativas > 0) {
@@ -427,11 +432,11 @@ void modoMedio(){
         // --- LÓGICA DA DICA ---
         if (tentativas == 7) {
              // Dica 1: País (Sempre inglaterra neste modo)
-             printf("💡 DICA 1: O time eh do(a) **%s**.\n", time_secreto.pais);
+             printf("💡 DICA 1: O time eh do(a) *%s*.\n", time_secreto.pais);
         } else {
              // Dica 2+: Tamanho do nome
              size_t tamanho_nome = strlen(time_secreto.nome);
-             printf("💡 DICA: O nome do time tem **%zu caracteres** (contando espacos/hifens).\n", tamanho_nome);
+             printf("💡 DICA: O nome do time tem *%zu caracteres* (contando espacos/hifens).\n", tamanho_nome);
         }
 
         // --- ENTRADA DO USUÁRIO ---
@@ -452,7 +457,7 @@ void modoMedio(){
 
         // --- VERIFICAÇÃO ---
         if (strcmp(palpite_upper, nome_secreto_upper) == 0) {
-            printf("\n🎉🎉 PARABENS! Voce adivinhou o time: **%s**! 🎉🎉\n", time_secreto.nome);
+            printf("\n🎉🎉 PARABENS! Voce adivinhou o time: *%s*! 🎉🎉\n", time_secreto.nome);
             return;
         } else {
             printf("❌ Que pena, '%s' nao eh o time secreto.\n", palpite);
@@ -464,7 +469,7 @@ void modoMedio(){
     printf("\n--- 💔 FIM DE JOGO 💔 ---\n");
     printf("Suas %d tentativas acabaram.\n", tentativas);
     printf("O time secreto era: **%s**\n", time_secreto.nome);
-}
+}//Modo medio
 
     
 
@@ -509,22 +514,21 @@ void modoDificil(){
     printf("\n--- ⚽ MODO DIIFICIL: ADIVINHE O TIME DO CAMPEONATO DOS EUA ⚽ ---\n");
     printf("Times da MLS 2025\n");
     //apresentação e regras
-    printf("Você terá 5 tentativas e 2 minutos de tempo\n");
-    printf("a cada erro voce perde 1 tentativa e 10 segundos!\n");
-    printf("O time secreto foi sorteado! Voce tem **%d tentativas**.\n", tentativas);
+    printf("a cada erro voce perde 1 tentativa\n");
+    printf("O time secreto foi sorteado! Voce tem *%d tentativas*.\n", tentativas);
 
     // --- 3. LOOP DE TENTATIVAS ---
     while (tentativas > 0) {
-        printf("\nTentativas restantes: **%d**\n", tentativas);
+        printf("\nTentativas restantes: *%d*\n", tentativas);
         
         // --- LÓGICA DA DICA ---
         if (tentativas == 5) {
              // Dica 1: País (Sempre inglaterra neste modo)
-             printf("💡 DICA 1: O time eh do(a) **%s**.\n", time_secreto.pais);
+             printf("💡 DICA 1: O time eh do(a) *%s*.\n", time_secreto.pais);
         } else {
              // Dica 2+: Tamanho do nome
              size_t tamanho_nome = strlen(time_secreto.nome);
-             printf("💡 DICA: O nome do time tem **%zu caracteres** (contando espacos/hifens).\n", tamanho_nome);
+             printf("💡 DICA: O nome do time tem *%zu caracteres* (contando espacos/hifens).\n", tamanho_nome);
         }
 
         // --- ENTRADA DO USUÁRIO ---
@@ -545,7 +549,7 @@ void modoDificil(){
 
         // --- VERIFICAÇÃO ---
         if (strcmp(palpite_upper, nome_secreto_upper) == 0) {
-            printf("\n🎉🎉 PARABENS! Voce adivinhou o time: **%s**! 🎉🎉\n", time_secreto.nome);
+            printf("\n🎉🎉 PARABENS! Voce adivinhou o time: *%s*! 🎉🎉\n", time_secreto.nome);
             return;
         } else {
             printf("❌ Que pena, '%s' nao eh o time secreto.\n", palpite);
@@ -561,12 +565,5 @@ void modoDificil(){
     
     
 }//MODO DIFICIL
-
-
-
-
-
-
-
 
 
