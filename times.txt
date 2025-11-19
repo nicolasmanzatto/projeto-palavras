@@ -6,7 +6,7 @@
 6|Fluminense|Brasil|America|4
 7|Botafogo|Brasil|America|3
 8|Vasco da Gama|Brasil|America|4
-9|Sao Paulo|Brasil|America|6
+9|São Paulo|Brasil|America|6
 10|Corinthians|Brasil|America|7
 11|Gremio|Brasil|America|2
 12|Red Bull Bragantino|Brasil|America|0
@@ -57,4 +57,5 @@
 57|New York Red Bulls|EUA|America|0
 58|Chicago Fire|EUA|America|0
 59|Inter Miami CF|EUA|America|0
+
 60|Orlando City|EUA|America|0
